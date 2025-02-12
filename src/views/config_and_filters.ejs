@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TwitchBot Control Panel</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/fonst/source-code-pro.css" rel="stylesheet">
   </head>
   <style rel="stylesheet">
     body {
       background-color: rgb(51, 49, 49);
+    }
+
+    #config-textarea, #filters-textarea {
+      font-family: "Source Code Pro";
     }
   </style>
   <header>
@@ -27,11 +32,14 @@
     </nav>
   </header>
   <body>
+    <!-- https://github.com/WebCoder49/code-input -->
     <div class="container-fluid">
-      <div class="row justify-content-md-center">
-        <div class="col-md-auto">
-          <div class="row justify-content-center align-items-center g-2">123</div>
-          <div class="row justify-content-center align-items-center g-2">123</div>
+      <div class="row">
+        <div class="col-md-6">
+          <textarea name="" id="#config-textarea" cols="100" rows="30"><%= response.config %></textarea>
+        </div>
+        <div class="col-md-6">
+          <textarea name="" id="#filters-textarea" cols="100" rows="30"><%= response.filters %></textarea>
         </div>
       </div>
     </div>
