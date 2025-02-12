@@ -1,16 +1,17 @@
 {
   "name": "mira-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Mira AI",
+  "description": "Frontend for TwitchBot",
   "license": "MIT",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "./main.js",
   "scripts": {
-    "server": "node ./src/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node ./main.js"
   },
   "dependencies": {
+    "bufferutil": "^4.0.9",
+    "ejs": "^3.1.10",
     "express": "^4.21.2",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
