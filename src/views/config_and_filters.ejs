@@ -36,10 +36,10 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-6">
-          <textarea name="" id="#config-textarea" cols="100" rows="30"><%= response.config %></textarea>
+          <textarea name="" id="#config-textarea" cols="100" rows="30"></textarea>
         </div>
         <div class="col-md-6">
-          <textarea name="" id="#filters-textarea" cols="100" rows="30"><%= response.filters %></textarea>
+          <textarea name="" id="#filters-textarea" cols="100" rows="30"></textarea>
         </div>
       </div>
     </div>
@@ -47,4 +47,20 @@
   <footer>
   </footer>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const ws = new WebSocket("ws://127.0.0.1:8811");
+    const config_textarea = document.getElementById("#config-textarea");
+    const filters_textarea = document.getElementById("#filters-textarea");
+
+    ws.onopen = (event) => {
+      ws.send("#requestconfig:#requestfilters");
+    };
+
+    ws.onmessage = (event) => {
+      const response = event.data.split("///");
+
+      config_textarea.value = response[0];
+      filters_textarea.value = response[1];
+    };
+  </script>
 </html>
