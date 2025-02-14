@@ -25,14 +25,109 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+            id="#mira-mute-btn"
+            onclick="sendMiraMute()"
+          >
+            Mira mute
+          </button>
         </div>
-        <div class="col-md-6">
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+            id="#ben-mute-btn"
+            onclick="sendBenMute()"
+          >
+            Ben mute
+          </button>
+        </div>
+        <div class="col-auto">
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="button"
+            aria-pressed="false"
+            autocomplete="off"
+            id="#iq-mute-btn"
+            onclick="sendIqMute()"
+          >
+            Iq mute
+          </button>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary" onclick="sendRestartCommand()">Restart</button>
         </div>
       </div>
     </div>
   </body>
-  <footer>
-  </footer>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const server = JSON.parse('<%- JSON.stringify(server) %>');
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
+
+    const mira_mute_btn = document.getElementById("#mira-mute-btn");
+    const ben_mute_btn = document.getElementById("#ben-mute-btn");
+    const iq_mute_btn = document.getElementById("#iq-mute-btn");
+
+    ws.onopen = (event) => {
+      console.info("[/] Sending command to request command state");
+      ws.send("#requestmutestate");
+    };
+
+    ws.onmessage = (event) => {
+      //      Mira               Ben               Iq
+      // <true or false>///<true or false>///<true or false>
+      const response = event.data.split("///");
+      console.info("[/] Returned resonse from server: " + response);
+
+      const mira_is_muted = response[0];
+      const ben_is_muted = response[1];
+      const iq_is_muted = response[2];
+
+      mira_mute_btn.setAttribute("aria-pressed", mira_is_muted);
+      ben_mute_btn.setAttribute("aria-pressed", ben_is_muted);
+      iq_mute_btn.setAttribute("aria-pressed", iq_is_muted);
+
+      if (mira_is_muted === "true") { mira_mute_btn.classList.add("active"); }
+      if (ben_is_muted === "true")  { ben_mute_btn.classList.add("active"); }
+      if (iq_is_muted === "true")   { iq_mute_btn.classList.add("active"); }
+    };
+
+    function sendMiraMute()
+    {
+      const value = mira_mute_btn.getAttribute("aria-pressed");
+      ws.send(`/miramute###${value}`);
+    }
+
+    function sendBenMute()
+    {
+      const value = mira_mute_btn.getAttribute("aria-pressed");
+      ws.send(`/benmute###${value}`);
+    }
+
+    function sendIqMute()
+    {
+      const value = mira_mute_btn.getAttribute("aria-pressed");
+      ws.send(`/iqmute###${value}`);
+    }
+
+    function sendRestartCommand()
+    {
+      ws.send("/restart");
+    }
+
+  </script>
 </html>

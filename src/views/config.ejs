@@ -34,7 +34,7 @@
       <div class="row">
         <div class="button-pannel">
           <div class="col">
-            <button type="button" id="btn-save-config" class="btn btn-primary" onclick="sendConfigToServer()">Save</button>
+            <button type="button" id="btn-save-config" class="btn btn-primary" onclick="sendConfigToServer()">Save config</button>
           </div>
         </div>
       </div>
@@ -44,18 +44,22 @@
   </footer>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
-    const ws = new WebSocket("ws://127.0.0.1:8811");
+    const server = JSON.parse('<%- JSON.stringify(server) %>');
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
     const config_textarea = document.getElementById("#config-textarea");
 
     ws.onopen = (event) => {
+      console.info("[/config] Sending command to request config");
       ws.send("#requestconfig");
     };
 
     ws.onmessage = (event) => {
       const response = event.data.split("///");
+      console.info("[/config] Returned resonse from server");
+
       config_textarea.value = response[0];
     };
 
-    function sendConfigToServer() { ws.send(`///updateconfig###${config_textarea.value}`) }
+    function sendConfigToServer() { ws.send(`/updateconfig###${config_textarea.value}`) }
   </script>
 </html>

@@ -34,7 +34,7 @@
       <div class="row">
         <div class="button-pannel">
           <div class="col">
-            <button type="button" id="btn-save-filters" class="btn btn-primary" onclick="sendFiltersToServer()">Save</button>
+            <button type="button" id="btn-save-filters" class="btn btn-primary" onclick="sendFiltersToServer()">Save filters</button>
           </div>
         </div>
       </div>
@@ -44,18 +44,22 @@
   </footer>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
-    const ws = new WebSocket("ws://127.0.0.1:8811");
+    const server = JSON.parse('<%- JSON.stringify(server) %>');
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
     const filters_textarea = document.getElementById("#filters-textarea");
 
     ws.onopen = (event) => {
+      console.info("[/filters] Sending command to request filters");
       ws.send("#requestfilters");
     };
 
     ws.onmessage = (event) => {
       const response = event.data.split("///");
+      console.info("[/filters] Returned resonse from server");
+
       filters_textarea.value = response[0];
     };
 
-    function sendFiltersToServer() { ws.send(`///updatefilters###${filters_textarea.value}`); }
+    function sendFiltersToServer() { ws.send(`/updatefilters###${filters_textarea.value}`); }
   </script>
 </html>

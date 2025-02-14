@@ -1,6 +1,9 @@
 const express = require("express");
 const pino = require("pino");
 
+const WS_SERVER_HOST = "127.0.0.1";
+const WS_SERVER_PORT = 8811;
+
 const LOGGER = pino({
   transport: {
     target: 'pino-pretty',
@@ -48,15 +51,15 @@ class Application
   #routes()
   {
     this.#express_app.get("/", (req, res) => {
-      res.render("index");
+      res.render("index", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
     });
 
     this.#express_app.get("/config", (req, res) => {
-      res.render("config");
+      res.render("config", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
     });
 
     this.#express_app.get("/filters", (req, res) => {
-      res.render("filters");
+      res.render("filters", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
     });
   }
 }
