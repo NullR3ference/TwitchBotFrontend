@@ -27,7 +27,8 @@ class Application
 
     this.#express_app.use(express.json());
     this.#express_app.use("/bootstrap", express.static(__dirname + "/bootstrap-dist"));
-    this.#express_app.use("/fonts", express.static(__dirname + "/node_modules/source-code-pro"))
+    this.#express_app.use("/fonts", express.static(__dirname + "/node_modules/source-code-pro"));
+    this.#express_app.use("/styles", express.static(__dirname + "/css"));
 
     this.#routes();
   }
@@ -50,8 +51,12 @@ class Application
       res.render("index");
     });
 
-    this.#express_app.get("/config_and_filters", (req, res) => {
-      res.render("config_and_filters");
+    this.#express_app.get("/config", (req, res) => {
+      res.render("config");
+    });
+
+    this.#express_app.get("/filters", (req, res) => {
+      res.render("filters");
     });
   }
 }
