@@ -33,7 +33,7 @@ class Application
     this.#express_app.use("/fonts", express.static(__dirname + "/node_modules/source-code-pro"));
     this.#express_app.use("/styles", express.static(__dirname + "/css"));
 
-    this.#routes();
+    this.routes();
   }
 
   run()
@@ -48,7 +48,7 @@ class Application
     });
   }
 
-  #routes()
+  routes()
   {
     this.#express_app.get("/", (req, res) => {
       res.render("index", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
