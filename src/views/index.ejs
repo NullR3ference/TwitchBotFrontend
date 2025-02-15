@@ -25,13 +25,14 @@
         </div>
     </header>
 
+    <!-- Moderation commands -->
     <div class="container">
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Moderation</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row">
+          <div class="row bot-functional-container-button-box">
             <div class="col-auto">
               <div class="btn-group" role="group">
                 <input type="checkbox" class="btn-check" id="mira-muted-checkbox" autocomplete="off" onclick="sendMiraMute()">
@@ -50,12 +51,13 @@
 
       <br>
 
+      <!-- Channel commands -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Channel management</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row">
+          <div class="row bot-functional-container-button-box">
             <div class="col-auto">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">
                 Add channel
@@ -67,17 +69,33 @@
               </button>
             </div>
           </div>
+
+          <br>
+
+          <div class="row bot-functional-container-button-box">
+            <div class="col-auto">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">
+                Join channel
+              </button>
+            </div>
+            <div class="col-auto">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">
+                Leave channel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       <br>
 
+      <!-- System commands -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">System</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row">
+          <div class="row bot-functional-container-button-box">
             <div class="col-auto">
               <button type="button" class="btn btn-danger" onclick="sendRestartCommand()">Restart</button>
             </div>
@@ -85,6 +103,7 @@
         </div>
       </div>
 
+      <!-- Add channel / Remove channel popups -->
       <div class="modal fade" id="add-channel-popup" tabindex="-1" aria-labelledby="add-channel-popup-label" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -107,7 +126,6 @@
           </div>
         </div>
       </div>
-
       <div class="modal fade" id="remove-channel-popup" tabindex="-1" aria-labelledby="remove-channel-popup-label" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -131,6 +149,51 @@
         </div>
       </div>
 
+      <!-- Join channel / Leave channel popups -->
+      <div class="modal fade" id="join-channel-popup" tabindex="-1" aria-labelledby="join-channel-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="join-channel-popup-label">Join to channel</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <label for="join-channel-input" class="col-form-label">Channel name:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="join-channel-input" name="join-channel-input">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="sendJoinChannel()">Ok</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="leave-channel-popup" tabindex="-1" aria-labelledby="leave-channel-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="leave-channel-popup-label">Leave from channel</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <label for="leave-channel-input" class="col-form-label">Channel name:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="leave-channel-input" name="leave-channel-input">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="sendLeaveChannel()">Ok</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -144,6 +207,8 @@
 
     const add_channel_input = document.querySelector("#add-channel-input");
     const remove_channel_input = document.querySelector("#remove-channel-input");
+    const join_channel_input = document.querySelector("#join-channel-input");
+    const leave_channel_input = document.querySelector("#leave-channel-input");
 
     ws.onopen = (event) => {
       console.info("[/] Sending command to request command state");
@@ -193,6 +258,18 @@
     {
       const channel_name = remove_channel_input.value;
       ws.send(`/rmchannel###${channel_name}`);
+    }
+
+    function sendJoinChannel()
+    {
+      const channel_name = join_channel_input.value;
+      ws.send(`/join###${channel_name}`);
+    }
+
+    function sendLeaveChannel()
+    {
+      const channel_name = leave_channel_input.value;
+      ws.send(`/join###${channel_name}`);
     }
 
     function sendRestartCommand()

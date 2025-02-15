@@ -10,7 +10,9 @@
 
 .bot-functional-container-body {
   margin: 5px;
+}
 
+.bot-functional-container-button-box {
   display: flex;
   align-items: center;
   justify-content: center;
