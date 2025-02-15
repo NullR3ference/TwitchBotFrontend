@@ -6,71 +6,131 @@
     <title>TwitchBot Control Panel</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/styles/styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/index.css">
   </head>
-  <header>    
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="/config">Config</a>
-            <a class="nav-link" href="/filters">Filters</a>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active" href="#">Home</a>
+              <a class="nav-link" href="/config">Config</a>
+              <a class="nav-link" href="/filters">Filters</a>
+            </div>
+          </div>
+        </div>
+    </header>
+
+    <div class="container">
+      <div class="bot-functional-container">
+        <div class="bot-functional-container-header">
+          <label class="container-name-label">Moderation</label>
+        </div>
+        <div class="bot-functional-container-body">
+          <div class="row">
+            <div class="col-auto">
+              <div class="btn-group" role="group">
+                <input type="checkbox" class="btn-check" id="mira-muted-checkbox" autocomplete="off" onclick="sendMiraMute()">
+                <label class="btn btn-outline-primary" for="mira-muted-checkbox">Mira command</label>
+
+                <input type="checkbox" class="btn-check" id="ben-muted-checkbox" autocomplete="off" onclick="sendBenMute()">
+                <label class="btn btn-outline-primary" for="ben-muted-checkbox">Ben command</label>
+
+                <input type="checkbox" class="btn-check" id="iq-muted-checkbox" autocomplete="off" onclick="sendIqMute()">
+                <label class="btn btn-outline-primary" for="iq-muted-checkbox">Iq command</label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-  </header>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-auto">
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="button"
-            aria-pressed="false"
-            autocomplete="off"
-            id="#mira-mute-btn"
-            onclick="sendMiraMute()"
-          >
-            Mira mute
-          </button>
-        </div>
-        <div class="col-auto">
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="button"
-            aria-pressed="false"
-            autocomplete="off"
-            id="#ben-mute-btn"
-            onclick="sendBenMute()"
-          >
-            Ben mute
-          </button>
-        </div>
-        <div class="col-auto">
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="button"
-            aria-pressed="false"
-            autocomplete="off"
-            id="#iq-mute-btn"
-            onclick="sendIqMute()"
-          >
-            Iq mute
-          </button>
-        </div>
-      </div>
+
       <br>
-      <div class="row">
-        <div class="col-auto">
-          <button type="button" class="btn btn-primary" onclick="sendRestartCommand()">Restart</button>
+
+      <div class="bot-functional-container">
+        <div class="bot-functional-container-header">
+          <label class="container-name-label">Channel management</label>
+        </div>
+        <div class="bot-functional-container-body">
+          <div class="row">
+            <div class="col-auto">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">
+                Add channel
+              </button>
+            </div>
+            <div class="col-auto">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">
+                Remove channel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+      <br>
+
+      <div class="bot-functional-container">
+        <div class="bot-functional-container-header">
+          <label class="container-name-label">System</label>
+        </div>
+        <div class="bot-functional-container-body">
+          <div class="row">
+            <div class="col-auto">
+              <button type="button" class="btn btn-danger" onclick="sendRestartCommand()">Restart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="add-channel-popup" tabindex="-1" aria-labelledby="add-channel-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="add-channel-popup-label">Add channel</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <label for="add-channel-input" class="col-form-label">Channel name:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="add-channel-input" name="add-channel-input">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="sendAddChannel()">Ok</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="remove-channel-popup" tabindex="-1" aria-labelledby="remove-channel-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="remove-channel-popup-label">Remove channel</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <label for="remove-channel-input" class="col-form-label">Channel name:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="remove-channel-input" name="remove-channel-input">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="sendRemoveChannel()">Ok</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </body>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -78,9 +138,12 @@
     const server = JSON.parse('<%- JSON.stringify(server) %>');
     const ws = new WebSocket(`ws://${server.host}:${server.port}`);
 
-    const mira_mute_btn = document.getElementById("#mira-mute-btn");
-    const ben_mute_btn = document.getElementById("#ben-mute-btn");
-    const iq_mute_btn = document.getElementById("#iq-mute-btn");
+    const mira_muted_checkbox = document.querySelector("#mira-muted-checkbox");
+    const ben_muted_checkbox = document.querySelector("#ben-muted-checkbox");
+    const iq_muted_checkbox = document.querySelector("#iq-muted-checkbox");
+
+    const add_channel_input = document.querySelector("#add-channel-input");
+    const remove_channel_input = document.querySelector("#remove-channel-input");
 
     ws.onopen = (event) => {
       console.info("[/] Sending command to request command state");
@@ -93,35 +156,43 @@
       const response = event.data.split("///");
       console.info("[/] Returned resonse from server: " + response);
 
-      const mira_is_muted = response[0];
-      const ben_is_muted = response[1];
-      const iq_is_muted = response[2];
+      const mira_is_muted = response[0] === "true";
+      const ben_is_muted = response[1] === "true";
+      const iq_is_muted = response[2] === "true";
 
-      mira_mute_btn.setAttribute("aria-pressed", mira_is_muted);
-      ben_mute_btn.setAttribute("aria-pressed", ben_is_muted);
-      iq_mute_btn.setAttribute("aria-pressed", iq_is_muted);
-
-      if (mira_is_muted === "true") { mira_mute_btn.classList.add("active"); }
-      if (ben_is_muted === "true")  { ben_mute_btn.classList.add("active"); }
-      if (iq_is_muted === "true")   { iq_mute_btn.classList.add("active"); }
+      mira_muted_checkbox.checked = !mira_is_muted;
+      ben_muted_checkbox.checked = !ben_is_muted;
+      iq_muted_checkbox.checked = !iq_is_muted;
     };
 
     function sendMiraMute()
     {
-      const value = mira_mute_btn.getAttribute("aria-pressed");
+      const value = !mira_muted_checkbox.checked;
       ws.send(`/miramute###${value}`);
     }
 
     function sendBenMute()
     {
-      const value = mira_mute_btn.getAttribute("aria-pressed");
+      const value = !ben_muted_checkbox.checked;
       ws.send(`/benmute###${value}`);
     }
 
     function sendIqMute()
     {
-      const value = mira_mute_btn.getAttribute("aria-pressed");
+      const value = !iq_muted_checkbox.checked;
       ws.send(`/iqmute###${value}`);
+    }
+
+    function sendAddChannel()
+    {
+      const channel_name = add_channel_input.value;
+      ws.send(`/addchannel###${channel_name}`);
+    }
+
+    function sendRemoveChannel()
+    {
+      const channel_name = remove_channel_input.value;
+      ws.send(`/rmchannel###${channel_name}`);
     }
 
     function sendRestartCommand()

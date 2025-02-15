@@ -1,0 +1,22 @@
+.bot-functional-container {
+  border: solid 1px rgb(255, 0, 179);
+  border-radius: 8px;
+}
+
+.bot-functional-container-header,
+.bot-functional-container-footer {
+  margin: 4px;
+}
+
+.bot-functional-container-body {
+  margin: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-name-label {
+  font-size: 20px;
+  color: white;
+}
