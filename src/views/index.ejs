@@ -277,7 +277,8 @@
     ws.onopen = (event) => {
       is_connected = true;
       setTextStatusConnected();
-      ws.send("#requestmutestate");
+      sendRequestMuteState();
+      sendRequestStatus();
     };
 
     ws.onclose = (event) => {
@@ -313,6 +314,11 @@
     function sendRequestStatus()
     {
       ws.send("#requeststatus");
+    }
+
+    function sendRequestMuteState()
+    {
+      ws.send("#requestmutestate");
     }
 
     function sendMiraMute()
