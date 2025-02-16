@@ -26,6 +26,8 @@
   </header>
   <body>
     <div class="container">
+
+      <!-- Connection status -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Status</label>
@@ -34,6 +36,13 @@
           <div class="row">
             <div class="col-auto">
               <p class="bot-functional-container-text text-connection-status-not-connected" id="server-connection-status">No connection</p>
+              <p class="bot-functional-container-text" id="server-status-message">##No data##</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto">
+              <input type="checkbox" class="btn-check" id="update-status-checkbox" autocomplete="off" onclick="doCheckServerStatus()">
+              <label class="btn btn-outline-primary" for="update-status-checkbox">Autorefresh</label>
             </div>
           </div>
         </div>
@@ -213,49 +222,98 @@
   </body>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
+    const CHECK_STATUS_INTERVAL = 5000;
+
     const server = JSON.parse('<%- JSON.stringify(server) %>');
     const ws = new WebSocket(`ws://${server.host}:${server.port}`);
-
+    
     const connection_status_text = document.querySelector("#server-connection-status");
-
+    const server_status_message_text = document.querySelector("#server-status-message");
+    
     const mira_muted_checkbox = document.querySelector("#mira-muted-checkbox");
     const ben_muted_checkbox = document.querySelector("#ben-muted-checkbox");
     const iq_muted_checkbox = document.querySelector("#iq-muted-checkbox");
-
+    const autorefresh_status_checkbox = document.querySelector("#update-status-checkbox");
+    
     const add_channel_input = document.querySelector("#add-channel-input");
     const remove_channel_input = document.querySelector("#remove-channel-input");
     const join_channel_input = document.querySelector("#join-channel-input");
     const leave_channel_input = document.querySelector("#leave-channel-input");
 
-    ws.onopen = (event) => {
+    let is_connected = false;
+
+    function doCheckServerStatus()
+    {
+      if (autorefresh_status_checkbox.checked)
+      {
+        if (is_connected)
+        {
+          setTextStatusConnected();
+          sendRequestStatus();
+        }
+        else
+        {
+          setTextStatusNotConnected();
+        }
+        setTimeout(doCheckServerStatus, CHECK_STATUS_INTERVAL);
+      }
+    }
+
+    function setTextStatusConnected()
+    {
       connection_status_text.innerHTML = "Connected";
       connection_status_text.classList.add("text-connection-status-connected");
       connection_status_text.classList.remove("text-connection-status-not-connected");
+    }
 
-      console.info("[/] Sending command to request command state");
+    function setTextStatusNotConnected()
+    {
+      connection_status_text.innerHTML = "No connection";
+      connection_status_text.classList.add("text-connection-status-not-connected");
+      connection_status_text.classList.remove("text-connection-status-connected");
+      server_status_message_text.innerHTML = "##No data##";
+    }
+
+    ws.onopen = (event) => {
+      is_connected = true;
+      setTextStatusConnected();
       ws.send("#requestmutestate");
     };
 
     ws.onclose = (event) => {
-      connection_status_text.innerHTML = "No connection";
-      connection_status_text.classList.add("text-connection-status-not-connected");
-      connection_status_text.classList.remove("text-connection-status-connected");
+      is_connected = false;
+      setTextStatusNotConnected();
     };
 
     ws.onmessage = (event) => {
-      //      Mira               Ben               Iq
-      // <true or false>///<true or false>///<true or false>
-      const response = event.data.split("///");
-      console.info("[/] Returned resonse from server: " + response);
+      const message = event.data;
 
-      const mira_is_muted = response[0] === "true";
-      const ben_is_muted = response[1] === "true";
-      const iq_is_muted = response[2] === "true";
+      if (message.startsWith("#"))
+      {
+        const status_message = message.split("///");
+        server_status_message_text.innerHTML = status_message[1];
+      }
+      else
+      {
+        //      Mira               Ben               Iq
+        // <true or false>///<true or false>///<true or false>
+        const response = message.split("///");
+        console.info("[/] Returned resonse from server: " + response);
 
-      mira_muted_checkbox.checked = !mira_is_muted;
-      ben_muted_checkbox.checked = !ben_is_muted;
-      iq_muted_checkbox.checked = !iq_is_muted;
+        const mira_is_muted = response[0] === "true";
+        const ben_is_muted = response[1] === "true";
+        const iq_is_muted = response[2] === "true";
+
+        mira_muted_checkbox.checked = !mira_is_muted;
+        ben_muted_checkbox.checked = !ben_is_muted;
+        iq_muted_checkbox.checked = !iq_is_muted;
+      }
     };
+
+    function sendRequestStatus()
+    {
+      ws.send("#requeststatus");
+    }
 
     function sendMiraMute()
     {
@@ -303,6 +361,5 @@
     {
       ws.send("/restart");
     }
-
   </script>
 </html>

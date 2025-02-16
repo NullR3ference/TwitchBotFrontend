@@ -3,6 +3,7 @@ const pino = require("pino");
 
 const WS_SERVER_HOST = "127.0.0.1";
 const WS_SERVER_PORT = 8811;
+const LOG_BASE_PATH = "../TwitchBot/logs/";
 
 const LOGGER = pino({
   transport: {
