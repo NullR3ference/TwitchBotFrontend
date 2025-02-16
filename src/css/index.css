@@ -18,7 +18,20 @@
   justify-content: center;
 }
 
+.bot-functional-container-text {
+  font-size: 18px;
+  color: white;
+}
+
 .container-name-label {
   font-size: 20px;
   color: white;
+}
+
+.text-connection-status-not-connected {
+  color: rgb(236, 37, 37);
+}
+
+.text-connection-status-connected {
+  color: rgb(121, 204, 26);
 }

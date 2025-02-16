@@ -8,26 +8,40 @@
     <link href="/styles/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="/styles/index.css">
   </head>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" href="#">Home</a>
+            <a class="nav-link" href="/config">Config</a>
+            <a class="nav-link" href="/filters">Filters</a>
+            <a class="nav-link" href="/logs">Logs</a>
+          </div>
+        </div>
+      </div>
+  </header>
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-link active" href="#">Home</a>
-              <a class="nav-link" href="/config">Config</a>
-              <a class="nav-link" href="/filters">Filters</a>
-              <a class="nav-link" href="/logs">Logs</a>
+    <div class="container">
+      <div class="bot-functional-container">
+        <div class="bot-functional-container-header">
+          <label class="container-name-label">Status</label>
+        </div>
+        <div class="bot-functional-container-body">
+          <div class="row">
+            <div class="col-auto">
+              <p class="bot-functional-container-text text-connection-status-not-connected" id="server-connection-status">No connection</p>
             </div>
           </div>
         </div>
-    </header>
+      </div>
 
-    <!-- Moderation commands -->
-    <div class="container">
+      <br>
+
+      <!-- Moderation commands -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Moderation</label>
@@ -202,6 +216,8 @@
     const server = JSON.parse('<%- JSON.stringify(server) %>');
     const ws = new WebSocket(`ws://${server.host}:${server.port}`);
 
+    const connection_status_text = document.querySelector("#server-connection-status");
+
     const mira_muted_checkbox = document.querySelector("#mira-muted-checkbox");
     const ben_muted_checkbox = document.querySelector("#ben-muted-checkbox");
     const iq_muted_checkbox = document.querySelector("#iq-muted-checkbox");
@@ -212,8 +228,18 @@
     const leave_channel_input = document.querySelector("#leave-channel-input");
 
     ws.onopen = (event) => {
+      connection_status_text.innerHTML = "Connected";
+      connection_status_text.classList.add("text-connection-status-connected");
+      connection_status_text.classList.remove("text-connection-status-not-connected");
+
       console.info("[/] Sending command to request command state");
       ws.send("#requestmutestate");
+    };
+
+    ws.onclose = (event) => {
+      connection_status_text.innerHTML = "No connection";
+      connection_status_text.classList.add("text-connection-status-not-connected");
+      connection_status_text.classList.remove("text-connection-status-connected");
     };
 
     ws.onmessage = (event) => {
