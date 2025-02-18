@@ -324,19 +324,19 @@
     function sendMiraMute()
     {
       const value = !mira_muted_checkbox.checked;
-      ws.send(`/miramute###${value}`);
+      ws.send(`/mute###mira###${value}`);
     }
 
     function sendBenMute()
     {
       const value = !ben_muted_checkbox.checked;
-      ws.send(`/benmute###${value}`);
+      ws.send(`/mute###ben###${value}`);
     }
 
     function sendIqMute()
     {
       const value = !iq_muted_checkbox.checked;
-      ws.send(`/iqmute###${value}`);
+      ws.send(`/mute###iq###${value}`);
     }
 
     function sendAddChannel()
