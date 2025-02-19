@@ -45,16 +45,23 @@
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
     const server = JSON.parse('<%- JSON.stringify(server) %>');
-    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
     const filters_textarea = document.getElementById("#filters-textarea");
 
-    ws.onopen = (event) => {
-      ws.send("#requestfilters");
-    };
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
 
-    ws.onmessage = (event) => {
+    ws.onopen = (event) => { ws.send("#requestfilters"); };
+
+    ws.onmessage = (event) =>
+    {
       const response = event.data.split("///");
-      filters_textarea.value = response[0];
+      if (response[0].startsWith("#"))
+      {
+        const command = response[0].replace("#", "");
+        if (command === "filters")
+        {
+          filters_textarea.value = response[1];
+        }
+      }
     };
 
     function sendFiltersToServer() { ws.send(`/updatefilters###${filters_textarea.value}`); }

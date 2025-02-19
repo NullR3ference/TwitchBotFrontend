@@ -45,16 +45,23 @@
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
     const server = JSON.parse('<%- JSON.stringify(server) %>');
-    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
     const config_textarea = document.getElementById("#config-textarea");
 
-    ws.onopen = (event) => {
-      ws.send("#requestconfig");
-    };
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
 
-    ws.onmessage = (event) => {
+    ws.onopen = (event) => { ws.send("#requestconfig"); };
+
+    ws.onmessage = (event) =>
+    {
       const response = event.data.split("///");
-      config_textarea.value = response[0];
+      if (response[0].startsWith("#"))
+      {
+        const command = response[0].replace("#", "");
+        if (command === "config")
+        {
+          config_textarea.value = response[1];
+        }
+      }
     };
 
     function sendConfigToServer() { ws.send(`/updateconfig###${config_textarea.value}`) }

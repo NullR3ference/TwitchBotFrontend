@@ -122,16 +122,16 @@
           <label class="container-name-label">Send custom message</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row">
-            <div class="col-lg-2">
-              <input class="text-field" type="text" id="custom-message-channel" placeholder="Channel name" spellcheck="false">
-            </div>
-            <div class="col-lg-8">
-              <input class="text-field" type="text" id="custom-message-text" placeholder="Message..." spellcheck="false">
-            </div>
-            <div class="col-lg-2">
-              <button type="button" class="btn btn-primary" id="send-custom-message" onclick="sendCustomMessage()">Send</button>
-            </div>
+          <div class="col-lg-2">
+            <input class="text-field" type="text" id="custom-message-channel" placeholder="Channel name" spellcheck="false">
+          </div>
+          <br>
+          <div class="col-lg-8">
+            <input class="text-field" type="text" id="custom-message-text" placeholder="Message..." spellcheck="false">
+          </div>
+          <br>
+          <div class="col-lg-2">
+            <button type="button" class="btn btn-primary" id="send-custom-message" onclick="sendCustomMessage()">Send</button>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@
       <br>
 
       <!-- Logs -->
-      <div class="bot-functional-container">
+      <!-- <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Logs</label>
         </div>
@@ -147,7 +147,7 @@
           <textarea class="text-field-log" id="text-area-current-log" spellcheck="false" rows="35"></textarea>
           <button type="button" class="btn btn-primary" onclick="clearLogs()">Clear</button>
         </div>
-      </div>
+      </div> -->
 
       <!-- Add channel / Remove channel popups -->
       <div class="modal fade" id="add-channel-popup" tabindex="-1" aria-labelledby="add-channel-popup-label" aria-hidden="true">
@@ -337,11 +337,11 @@
           ben_muted_checkbox.checked = !ben_is_muted;
           iq_muted_checkbox.checked = !iq_is_muted;
         }
-        else if (cmd === "logline")
-        {
-          log_text_area.value += data[1];
-          log_text_area.scrollTop = log_text_area.scrollHeight;
-        }
+        // else if (cmd === "logline")
+        // {
+        //   log_text_area.value += data[1];
+        //   log_text_area.scrollTop = log_text_area.scrollHeight;
+        // }
       }
     };
 
