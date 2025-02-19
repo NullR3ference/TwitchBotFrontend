@@ -19,7 +19,6 @@
             <a class="nav-link" href="/">Home</a>
             <a class="nav-link" href="/config">Config</a>
             <a class="nav-link active" href="#">Filters</a>
-            <a class="nav-link" href="/logs">Logs</a>
           </div>
         </div>
       </div>
@@ -50,14 +49,11 @@
     const filters_textarea = document.getElementById("#filters-textarea");
 
     ws.onopen = (event) => {
-      console.info("[/filters] Sending command to request filters");
       ws.send("#requestfilters");
     };
 
     ws.onmessage = (event) => {
       const response = event.data.split("///");
-      console.info("[/filters] Returned resonse from server");
-
       filters_textarea.value = response[0];
     };
 

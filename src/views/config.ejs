@@ -19,7 +19,6 @@
             <a class="nav-link" href="/">Home</a>
             <a class="nav-link active" href="#">Config</a>
             <a class="nav-link" href="/filters">Filters</a>
-            <a class="nav-link" href="/logs">Logs</a>
           </div>
         </div>
       </div>
@@ -50,14 +49,11 @@
     const config_textarea = document.getElementById("#config-textarea");
 
     ws.onopen = (event) => {
-      console.info("[/config] Sending command to request config");
       ws.send("#requestconfig");
     };
 
     ws.onmessage = (event) => {
       const response = event.data.split("///");
-      console.info("[/config] Returned resonse from server");
-
       config_textarea.value = response[0];
     };
 

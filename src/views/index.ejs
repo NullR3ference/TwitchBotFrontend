@@ -19,45 +19,43 @@
             <a class="nav-link active" href="#">Home</a>
             <a class="nav-link" href="/config">Config</a>
             <a class="nav-link" href="/filters">Filters</a>
-            <a class="nav-link" href="/logs">Logs</a>
           </div>
         </div>
       </div>
   </header>
   <body>
     <div class="container">
-
-      <!-- Connection status -->
-      <div class="bot-functional-container">
-        <div class="bot-functional-container-header">
-          <label class="container-name-label">Status</label>
-        </div>
-        <div class="bot-functional-container-body">
-          <div class="row">
-            <div class="col-auto">
-              <p class="bot-functional-container-text text-connection-status-not-connected" id="server-connection-status">No connection</p>
-              <p class="bot-functional-container-text" id="server-status-message">##No data##</p>
+      <div class="row">
+        <!-- Connection status -->
+        <div class="col-lg-6">
+          <div class="bot-functional-container">
+            <div class="bot-functional-container-header">
+              <label class="container-name-label">Status</label>
+            </div>
+            <div class="bot-functional-container-body">
+              <div class="row">
+                <div class="col-auto">
+                  <p class="bot-functional-container-text text-connection-status-not-connected" id="server-connection-status">No connection</p>
+                  <p class="bot-functional-container-text" id="server-status-message">##No data##</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-auto">
+                  <input type="checkbox" class="btn-check" id="update-status-checkbox" autocomplete="off" onclick="doCheckServerStatus()">
+                  <label class="btn btn-outline-primary" for="update-status-checkbox">Autorefresh</label>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-auto">
-              <input type="checkbox" class="btn-check" id="update-status-checkbox" autocomplete="off" onclick="doCheckServerStatus()">
-              <label class="btn btn-outline-primary" for="update-status-checkbox">Autorefresh</label>
+        </div>
+
+        <div class="col-lg-6">
+          <!-- Moderation commands -->
+          <div class="bot-functional-container">
+            <div class="bot-functional-container-header">
+              <label class="container-name-label">Moderation</label>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <br>
-
-      <!-- Moderation commands -->
-      <div class="bot-functional-container">
-        <div class="bot-functional-container-header">
-          <label class="container-name-label">Moderation</label>
-        </div>
-        <div class="bot-functional-container-body">
-          <div class="row bot-functional-container-button-box">
-            <div class="col-auto">
+            <div class="bot-functional-container-body">
               <div class="btn-group" role="group">
                 <input type="checkbox" class="btn-check" id="mira-muted-checkbox" autocomplete="off" onclick="sendMiraMute()">
                 <label class="btn btn-outline-primary" for="mira-muted-checkbox">Mira command</label>
@@ -67,6 +65,20 @@
 
                 <input type="checkbox" class="btn-check" id="iq-muted-checkbox" autocomplete="off" onclick="sendIqMute()">
                 <label class="btn btn-outline-primary" for="iq-muted-checkbox">Iq command</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- System commands -->
+          <div class="bot-functional-container">
+            <div class="bot-functional-container-header">
+              <label class="container-name-label">System</label>
+            </div>
+            <div class="bot-functional-container-body">
+              <div class="row">
+                <div class="col-auto">
+                  <button type="button" class="btn btn-danger" onclick="sendRestartCommand()">Restart</button>
+                </div>
               </div>
             </div>
           </div>
@@ -81,28 +93,19 @@
           <label class="container-name-label">Channel management</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row bot-functional-container-button-box">
-            <div class="col-auto">
+          <div class="row">
+            <div class="col-md-4">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">
                 Add channel
               </button>
-            </div>
-            <div class="col-auto">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">
                 Remove channel
               </button>
             </div>
-          </div>
-
-          <br>
-
-          <div class="row bot-functional-container-button-box">
-            <div class="col-auto">
+            <div class="col-md-4">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">
                 Join channel
               </button>
-            </div>
-            <div class="col-auto">
               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">
                 Leave channel
               </button>
@@ -113,17 +116,35 @@
 
       <br>
 
-      <!-- System commands -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
-          <label class="container-name-label">System</label>
+          <label class="container-name-label">Send custom message</label>
         </div>
         <div class="bot-functional-container-body">
-          <div class="row bot-functional-container-button-box">
-            <div class="col-auto">
-              <button type="button" class="btn btn-danger" onclick="sendRestartCommand()">Restart</button>
+          <div class="row">
+            <div class="col-lg-2">
+              <input class="text-field" type="text" id="custom-message-channel" placeholder="Channel name" spellcheck="false">
+            </div>
+            <div class="col-lg-8">
+              <input class="text-field" type="text" id="custom-message-text" placeholder="Message..." spellcheck="false">
+            </div>
+            <div class="col-lg-2">
+              <button type="button" class="btn btn-primary" id="send-custom-message">Send</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- Logs -->
+      <div class="bot-functional-container">
+        <div class="bot-functional-container-header">
+          <label class="container-name-label">Logs</label>
+        </div>
+        <div class="bot-functional-container-body">
+          <textarea class="text-field-log" id="text-area-current-log" spellcheck="false" rows="35"></textarea>
+          <button type="button" class="btn btn-primary" onclick="clearLogs()">Clear</button>
         </div>
       </div>
 
@@ -223,24 +244,26 @@
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script>
     const CHECK_STATUS_INTERVAL = 5000;
-
+    const RECONNECTION_INTERVAL = 5000;
     const server = JSON.parse('<%- JSON.stringify(server) %>');
-    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
-    
+
     const connection_status_text = document.querySelector("#server-connection-status");
     const server_status_message_text = document.querySelector("#server-status-message");
-    
+
     const mira_muted_checkbox = document.querySelector("#mira-muted-checkbox");
     const ben_muted_checkbox = document.querySelector("#ben-muted-checkbox");
     const iq_muted_checkbox = document.querySelector("#iq-muted-checkbox");
     const autorefresh_status_checkbox = document.querySelector("#update-status-checkbox");
-    
+
     const add_channel_input = document.querySelector("#add-channel-input");
     const remove_channel_input = document.querySelector("#remove-channel-input");
     const join_channel_input = document.querySelector("#join-channel-input");
     const leave_channel_input = document.querySelector("#leave-channel-input");
 
+    const log_text_area = document.querySelector("#text-area-current-log");
+
     let is_connected = false;
+    const ws = new WebSocket(`ws://${server.host}:${server.port}`);
 
     function doCheckServerStatus()
     {
@@ -286,86 +309,60 @@
       setTextStatusNotConnected();
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = (event) =>
+    {
       const message = event.data;
 
       if (message.startsWith("#"))
       {
-        const status_message = message.split("///");
-        server_status_message_text.innerHTML = status_message[1];
-      }
-      else
-      {
-        //      Mira               Ben               Iq
-        // <true or false>///<true or false>///<true or false>
-        const response = message.split("///");
-        console.info("[/] Returned resonse from server: " + response);
+        const data = message.split("///");
+        const cmd = data[0].replace("#", "");
 
-        const mira_is_muted = response[0] === "true";
-        const ben_is_muted = response[1] === "true";
-        const iq_is_muted = response[2] === "true";
+        console.log(`Cmd: ${cmd} | Data: ${data}`);
 
-        mira_muted_checkbox.checked = !mira_is_muted;
-        ben_muted_checkbox.checked = !ben_is_muted;
-        iq_muted_checkbox.checked = !iq_is_muted;
+        if (cmd === "status")
+        {
+          server_status_message_text.innerHTML = data[1];
+        }
+        else if (cmd === "mutestate")
+        {
+          const mira_is_muted = data[1] === "true";
+          const ben_is_muted = data[2] === "true";
+          const iq_is_muted = data[3] === "true";
+
+          mira_muted_checkbox.checked = !mira_is_muted;
+          ben_muted_checkbox.checked = !ben_is_muted;
+          iq_muted_checkbox.checked = !iq_is_muted;
+        }
+        else if (cmd === "logline")
+        {
+          log_text_area.value += data[1];
+          log_text_area.scrollTop = log_text_area.scrollHeight;
+        }
       }
     };
 
-    function sendRequestStatus()
+    function sendRequestStatus()    { ws.send("#requeststatus"); }
+    function sendRequestMuteState() { ws.send("#requestmutestate"); }
+
+    function sendMiraMute() { ws.send(`/mute###mira###${!mira_muted_checkbox.checked}`); }
+    function sendBenMute()  { ws.send(`/mute###ben###${!ben_muted_checkbox.checked}`); }
+    function sendIqMute()   { ws.send(`/mute###iq###${!iq_muted_checkbox.checked}`); }
+
+    function sendAddChannel()     { ws.send(`/addchannel###${add_channel_input.value}`); }
+    function sendRemoveChannel()  { ws.send(`/rmchannel###${remove_channel_input.value}`); }
+
+    function sendJoinChannel()  { ws.send(`/join###${join_channel_input.value}`); }
+    function sendLeaveChannel() { ws.send(`/leave###${leave_channel_input.value}`); }
+
+    function sendRestartCommand() { ws.send("/restart"); }
+
+    function sendCustomMessage()
     {
-      ws.send("#requeststatus");
+      const message_content = "";
+      ws.send(`/sendmessage###${channel_name}###${message}`);
     }
 
-    function sendRequestMuteState()
-    {
-      ws.send("#requestmutestate");
-    }
-
-    function sendMiraMute()
-    {
-      const value = !mira_muted_checkbox.checked;
-      ws.send(`/mute###mira###${value}`);
-    }
-
-    function sendBenMute()
-    {
-      const value = !ben_muted_checkbox.checked;
-      ws.send(`/mute###ben###${value}`);
-    }
-
-    function sendIqMute()
-    {
-      const value = !iq_muted_checkbox.checked;
-      ws.send(`/mute###iq###${value}`);
-    }
-
-    function sendAddChannel()
-    {
-      const channel_name = add_channel_input.value;
-      ws.send(`/addchannel###${channel_name}`);
-    }
-
-    function sendRemoveChannel()
-    {
-      const channel_name = remove_channel_input.value;
-      ws.send(`/rmchannel###${channel_name}`);
-    }
-
-    function sendJoinChannel()
-    {
-      const channel_name = join_channel_input.value;
-      ws.send(`/join###${channel_name}`);
-    }
-
-    function sendLeaveChannel()
-    {
-      const channel_name = leave_channel_input.value;
-      ws.send(`/join###${channel_name}`);
-    }
-
-    function sendRestartCommand()
-    {
-      ws.send("/restart");
-    }
+    function clearLogs() { log_text_area.value = ""; }
   </script>
 </html>

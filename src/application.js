@@ -62,10 +62,6 @@ class Application
     this.#express_app.get("/filters", (req, res) => {
       res.render("filters", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
     });
-
-    this.#express_app.get("/logs", (req, res) => {
-      res.render("logs", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
-    });
   }
 }
 
