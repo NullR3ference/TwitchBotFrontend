@@ -116,6 +116,7 @@
 
       <br>
 
+      <!-- Custom message -->
       <div class="bot-functional-container">
         <div class="bot-functional-container-header">
           <label class="container-name-label">Send custom message</label>
@@ -129,7 +130,7 @@
               <input class="text-field" type="text" id="custom-message-text" placeholder="Message..." spellcheck="false">
             </div>
             <div class="col-lg-2">
-              <button type="button" class="btn btn-primary" id="send-custom-message">Send</button>
+              <button type="button" class="btn btn-primary" id="send-custom-message" onclick="sendCustomMessage()">Send</button>
             </div>
           </div>
         </div>
@@ -260,6 +261,8 @@
     const join_channel_input = document.querySelector("#join-channel-input");
     const leave_channel_input = document.querySelector("#leave-channel-input");
 
+    const custom_message_channel_input = document.querySelector("#custom-message-channel");
+    const custom_message_text_input = document.querySelector("#custom-message-text");
     const log_text_area = document.querySelector("#text-area-current-log");
 
     let is_connected = false;
@@ -359,8 +362,9 @@
 
     function sendCustomMessage()
     {
-      const message_content = "";
-      ws.send(`/sendmessage###${channel_name}###${message}`);
+      const channel_name = custom_message_channel_input.value;
+      const message_content = custom_message_text_input.value;
+      ws.send(`/sendmessage###${channel_name}###${message_content}`);
     }
 
     function clearLogs() { log_text_area.value = ""; }
