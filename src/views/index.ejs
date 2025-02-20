@@ -138,6 +138,59 @@
 
       <br>
 
+      <p>
+        <a
+          class="btn btn-primary"
+          data-bs-toggle="collapse"
+          href="#config-collapse-content"
+          aria-expanded="false"
+          aria-controls="config-collapse-content"
+        >
+          Config
+        </a>
+        <a
+          class="btn btn-primary"
+          data-bs-toggle="collapse"
+          href="#filters-collapse-content"
+          aria-expanded="false"
+          aria-controls="filters-collapse-content"
+        >
+          Filters
+        </a>
+      </p>
+
+      <div class="col-lg-12">
+        <div class="collapse" id="config-collapse-content">
+          <div class="bot-functional-container">
+            <div class="bot-functional-container-header">
+              <label class="container-name-label">Config</label>
+            </div>
+            <div class="bot-functional-container-body">
+              <textarea class="text-field" id="config-textarea" spellcheck="false" rows="25">Empty</textarea>
+              <br>
+              <button type="button" id="btn-save-config" class="btn btn-primary" onclick="sendConfigToServer()">Save config</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="col-lg-12">
+        <div class="collapse" id="filters-collapse-content">
+          <div class="bot-functional-container">
+            <div class="bot-functional-container-header">
+              <label class="container-name-label">Filters</label>
+            </div>
+            <div class="bot-functional-container-body">
+              <textarea class="text-field" id="filters-textarea" spellcheck="false" rows="25">Empty</textarea>
+              <br>
+              <button type="button" id="btn-save-filters" class="btn btn-primary" onclick="sendFiltersToServer()">Save filters</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Logs -->
       <!-- <div class="bot-functional-container">
         <div class="bot-functional-container-header">
@@ -265,8 +318,21 @@
     const custom_message_text_input = document.querySelector("#custom-message-text");
     const log_text_area = document.querySelector("#text-area-current-log");
 
+    const config_textarea = document.querySelector("#config-textarea");
+    const filters_textarea = document.querySelector("#filters-textarea");
+    const config_collapse_content = document.querySelector("#config-collapse-content");
+    const filters_collapse_content = document.querySelector("#filters-collapse-content");
+
     let is_connected = false;
     const ws = new WebSocket(`ws://${server.host}:${server.port}`);
+
+    config_collapse_content.addEventListener("show.bs.collapse", () => {
+      ws.send("#requestconfig");
+    });
+
+    filters_collapse_content.addEventListener("show.bs.collapse", () => {
+      ws.send("#requestfilters");
+    });
 
     function doCheckServerStatus()
     {
@@ -300,14 +366,17 @@
       server_status_message_text.innerHTML = "##No data##";
     }
 
-    ws.onopen = (event) => {
+    ws.onopen = (event) =>
+    {
       is_connected = true;
+
       setTextStatusConnected();
       sendRequestMuteState();
       sendRequestStatus();
     };
 
-    ws.onclose = (event) => {
+    ws.onclose = (event) =>
+    {
       is_connected = false;
       setTextStatusNotConnected();
     };
@@ -321,27 +390,24 @@
         const data = message.split("///");
         const cmd = data[0].replace("#", "");
 
-        console.log(`Cmd: ${cmd} | Data: ${data}`);
-
         if (cmd === "status")
         {
           server_status_message_text.innerHTML = data[1];
         }
         else if (cmd === "mutestate")
         {
-          const mira_is_muted = data[1] === "true";
-          const ben_is_muted = data[2] === "true";
-          const iq_is_muted = data[3] === "true";
-
-          mira_muted_checkbox.checked = !mira_is_muted;
-          ben_muted_checkbox.checked = !ben_is_muted;
-          iq_muted_checkbox.checked = !iq_is_muted;
+          mira_muted_checkbox.checked = data[1] !== "true";
+          ben_muted_checkbox.checked = data[2] !== "true";
+          iq_muted_checkbox.checked = data[3] !== "true";
         }
-        // else if (cmd === "logline")
-        // {
-        //   log_text_area.value += data[1];
-        //   log_text_area.scrollTop = log_text_area.scrollHeight;
-        // }
+        else if (cmd === "config")
+        {
+          config_textarea.value = data[1];
+        }
+        else if (cmd == "filters")
+        {
+          filters_textarea.value = data[1];
+        }
       }
     };
 
@@ -368,5 +434,23 @@
     }
 
     function clearLogs() { log_text_area.value = ""; }
+
+    function sendConfigToServer()
+    {
+      const content = config_textarea.value;
+      if (!content && (content !== "Empty" || content !== ""))
+      {
+        ws.send(`/updateconfig###${content}`)
+      }
+    }
+
+    function sendFiltersToServer()
+    {
+      const content = filters_textarea.value;
+      if (!content && (content !== "Empty" || content !== ""))
+      {
+        ws.send(`/updatefilters###${content}`);
+      }
+    }
   </script>
 </html>
