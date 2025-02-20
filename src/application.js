@@ -54,14 +54,6 @@ class Application
     this.#express_app.get("/", (req, res) => {
       res.render("index", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
     });
-
-    this.#express_app.get("/config", (req, res) => {
-      res.render("config", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
-    });
-
-    this.#express_app.get("/filters", (req, res) => {
-      res.render("filters", { server: { host: WS_SERVER_HOST, port: WS_SERVER_PORT } });
-    });
   }
 }
 

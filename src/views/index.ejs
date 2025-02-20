@@ -8,7 +8,7 @@
     <link href="/styles/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="/styles/index.css">
   </head>
-  <header>
+  <!-- <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,17 +17,34 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="/config">Config</a>
-            <a class="nav-link" href="/filters">Filters</a>
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#config-collapse-content"
+              aria-expanded="false"
+              aria-controls="config-collapse-content"
+            >
+              Config
+            </a>
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#filters-collapse-content"
+              aria-expanded="false"
+              aria-controls="filters-collapse-content"
+            >
+              Filters
+            </a>
           </div>
         </div>
       </div>
-  </header>
+    </nav>
+  </header> -->
   <body>
     <div class="container">
       <div class="row">
         <!-- Connection status -->
-        <div class="col-lg-6">
+        <div class="col-md-6">
           <div class="bot-functional-container">
             <div class="bot-functional-container-header">
               <label class="container-name-label">Status</label>
@@ -49,22 +66,22 @@
           </div>
         </div>
 
-        <div class="col-lg-6">
-          <!-- Moderation commands -->
+        <div class="col-md-6">
+          <!-- Commands -->
           <div class="bot-functional-container">
             <div class="bot-functional-container-header">
-              <label class="container-name-label">Moderation</label>
+              <label class="container-name-label">Active commands</label>
             </div>
             <div class="bot-functional-container-body">
-              <div class="btn-group" role="group">
+              <div class="gap-2 btn-group bot-functional-container-button-box" role="group">
                 <input type="checkbox" class="btn-check" id="mira-muted-checkbox" autocomplete="off" onclick="sendMiraMute()">
-                <label class="btn btn-outline-primary" for="mira-muted-checkbox">Mira command</label>
+                <label class="btn btn-outline-primary" for="mira-muted-checkbox">Mira</label>
 
                 <input type="checkbox" class="btn-check" id="ben-muted-checkbox" autocomplete="off" onclick="sendBenMute()">
-                <label class="btn btn-outline-primary" for="ben-muted-checkbox">Ben command</label>
+                <label class="btn btn-outline-primary" for="ben-muted-checkbox">Ben</label>
 
                 <input type="checkbox" class="btn-check" id="iq-muted-checkbox" autocomplete="off" onclick="sendIqMute()">
-                <label class="btn btn-outline-primary" for="iq-muted-checkbox">Iq command</label>
+                <label class="btn btn-outline-primary" for="iq-muted-checkbox">Iq</label>
               </div>
             </div>
           </div>
@@ -74,7 +91,7 @@
             <div class="bot-functional-container-header">
               <label class="container-name-label">System</label>
             </div>
-            <div class="bot-functional-container-body">
+            <div class="bot-functional-container-body bot-functional-container-button-box">
               <div class="row">
                 <div class="col-auto">
                   <button type="button" class="btn btn-danger" onclick="sendRestartCommand()">Restart</button>
@@ -92,24 +109,14 @@
         <div class="bot-functional-container-header">
           <label class="container-name-label">Channel management</label>
         </div>
-        <div class="bot-functional-container-body">
-          <div class="row">
-            <div class="col-md-4">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">
-                Add channel
-              </button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">
-                Remove channel
-              </button>
-            </div>
-            <div class="col-md-4">
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">
-                Join channel
-              </button>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">
-                Leave channel
-              </button>
-            </div>
+        <div class="row row-gap-2 bot-functional-container-body">
+          <div class="btn-group gap-2 bot-functional-container-button-box" role="group">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">Add channel</button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">Remove channel</button>
+          </div>
+          <div class="btn-group gap-2 bot-functional-container-button-box" role="group">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">Leave channel</button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">Join channel</button>
           </div>
         </div>
       </div>
@@ -438,7 +445,7 @@
     function sendConfigToServer()
     {
       const content = config_textarea.value;
-      if (!content && (content !== "Empty" || content !== ""))
+      if (content && content !== "Empty")
       {
         ws.send(`/updateconfig###${content}`)
       }
@@ -447,7 +454,7 @@
     function sendFiltersToServer()
     {
       const content = filters_textarea.value;
-      if (!content && (content !== "Empty" || content !== ""))
+      if (content && content !== "Empty")
       {
         ws.send(`/updatefilters###${content}`);
       }
