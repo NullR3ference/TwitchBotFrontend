@@ -6,40 +6,8 @@
     <title>TwitchBot Control Panel</title>
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/styles/styles.css" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/index.css">
+    <link href="/styles/index.css" rel="stylesheet">
   </head>
-  <!-- <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" href="#">Home</a>
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#config-collapse-content"
-              aria-expanded="false"
-              aria-controls="config-collapse-content"
-            >
-              Config
-            </a>
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#filters-collapse-content"
-              aria-expanded="false"
-              aria-controls="filters-collapse-content"
-            >
-              Filters
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header> -->
   <body>
     <div class="container">
       <div class="row">
@@ -105,18 +73,25 @@
       <br>
 
       <!-- Channel commands -->
-      <div class="bot-functional-container">
+      <div class="bot-functional-container container">
         <div class="bot-functional-container-header">
-          <label class="container-name-label">Channel management</label>
+          <label class="container-name-label">Bot management</label>
         </div>
-        <div class="row row-gap-2 bot-functional-container-body">
-          <div class="btn-group gap-2 bot-functional-container-button-box" role="group">
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">Add channel</button>
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">Remove channel</button>
+        <div class="d-grid gap-2 bot-functional-container-body">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <div class="d-grid gap-2 col-12 col-md-6">
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add-channel-popup">Add channel</button>
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#remove-channel-popup">Remove channel</button>
+            </div>
+            <div class="d-grid gap-2 col-12 col-md-6">
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">Leave channel</button>
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">Join channel</button>
+            </div>
           </div>
-          <div class="btn-group gap-2 bot-functional-container-button-box" role="group">
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#leave-channel-popup">Leave channel</button>
-            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#join-channel-popup">Join channel</button>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <div class="d-grid col-12">
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#set-permission-popup">Set permission</button>
+            </div>
           </div>
         </div>
       </div>
@@ -197,17 +172,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Logs -->
-      <!-- <div class="bot-functional-container">
-        <div class="bot-functional-container-header">
-          <label class="container-name-label">Logs</label>
-        </div>
-        <div class="bot-functional-container-body">
-          <textarea class="text-field-log" id="text-area-current-log" spellcheck="false" rows="35"></textarea>
-          <button type="button" class="btn btn-primary" onclick="clearLogs()">Clear</button>
-        </div>
-      </div> -->
 
       <!-- Add channel / Remove channel popups -->
       <div class="modal fade" id="add-channel-popup" tabindex="-1" aria-labelledby="add-channel-popup-label" aria-hidden="true">
@@ -300,6 +264,37 @@
           </div>
         </div>
       </div>
+
+      <!-- Set permission popup -->
+      <div class="modal fade" id="set-permission-popup" tabindex="-1" aria-labelledby="set-permission-popup-label" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="set-permission-popup-label">Set user permission</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <label for="set-permission-input" class="col-form-label">User name:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="set-permission-input" name="set-permission-input">
+                </div>
+              </div>
+              <div class="row">
+                <label for="set-permission-level-input" class="col-form-label">Level:</label>
+                <div class="col-lg">
+                  <input type="text" class="form-control" id="set-permission-level-input" name="set-permission-level-input">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="sendSetPermission()">Ok</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </body>
   <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -321,9 +316,11 @@
     const join_channel_input = document.querySelector("#join-channel-input");
     const leave_channel_input = document.querySelector("#leave-channel-input");
 
+    const set_permission_input = document.querySelector("#set-permission-input");
+    const set_permission_level_input = document.querySelector("#set-permission-level-input");
+
     const custom_message_channel_input = document.querySelector("#custom-message-channel");
     const custom_message_text_input = document.querySelector("#custom-message-text");
-    const log_text_area = document.querySelector("#text-area-current-log");
 
     const config_textarea = document.querySelector("#config-textarea");
     const filters_textarea = document.querySelector("#filters-textarea");
@@ -437,15 +434,14 @@
     {
       const channel_name = custom_message_channel_input.value;
       const message_content = custom_message_text_input.value;
+      custom_message_text_input.value = "";
       ws.send(`/sendmessage###${channel_name}###${message_content}`);
     }
-
-    function clearLogs() { log_text_area.value = ""; }
 
     function sendConfigToServer()
     {
       const content = config_textarea.value;
-      if (content && content !== "Empty")
+      if (content && content !== "" && content !== "Empty")
       {
         ws.send(`/updateconfig###${content}`)
       }
@@ -454,9 +450,20 @@
     function sendFiltersToServer()
     {
       const content = filters_textarea.value;
-      if (content && content !== "Empty")
+      if (content && content !== "" && content !== "Empty")
       {
         ws.send(`/updatefilters###${content}`);
+      }
+    }
+
+    function sendSetPermission()
+    {
+      const target_user_name = set_permission_input.value;
+      const target_level = set_permission_level_input.value;
+
+      if (target_user_name !== "" && target_level !== "")
+      {
+        ws.send(`/setpermission###${target_user_name}###${target_level}`);
       }
     }
   </script>
