@@ -440,19 +440,35 @@
 
     function sendConfigToServer()
     {
-      const content = config_textarea.value;
-      if (content && content !== "" && content !== "Empty")
+      try
       {
-        ws.send(`/updateconfig###${content}`)
+        const content = config_textarea.value;
+        if (content && content !== "" && content !== "Empty")
+        {
+          const json_data = JSON.stringify(JSON.parse(content));
+          ws.send(`/updateconfig###${content}`);
+        }
+      }
+      catch (error)
+      {
+        console.error("Error while sending config: " + error.message);
       }
     }
 
     function sendFiltersToServer()
     {
-      const content = filters_textarea.value;
-      if (content && content !== "" && content !== "Empty")
+      try
       {
-        ws.send(`/updatefilters###${content}`);
+        const content = filters_textarea.value;
+        if (content && content !== "" && content !== "Empty")
+        {
+          const json_data = JSON.stringify(JSON.parse(content));
+          ws.send(`/updatefilters###${json_data}`);
+        }
+      }
+      catch (error)
+      {
+        console.error("Error while sending filters: " + error.message);
       }
     }
 
